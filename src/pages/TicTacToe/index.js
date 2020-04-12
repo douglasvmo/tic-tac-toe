@@ -1,0 +1,377 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, Button, TouchableOpacity } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
+import style, { color } from './style';
+
+import Circle from '../../components/O';
+import X from '../../components/X';
+
+export default function TicTacToe(props) {
+  const navigation = useNavigation();
+  const { robotMode, player1, player2, gameType } = props.route.params;
+
+  const [board, setBoard] = useState(Array(9).fill(0));
+
+  const [gameTime, setGameTime] = useState(1);
+  const [gameFinished, setGameFinished] = useState(false);
+  const [winner, setWinner] = useState('');
+  const [score, setscore] = useState([0, 0]);
+
+  useEffect(() => {
+    var winerNumber = getTheWinner();
+
+    if (winerNumber !== -1) {
+      setGameFinished(true);
+      showWinner(winerNumber);
+    } else {
+      if (gameType === 0) {
+        robotTurn();
+      }
+    }
+  }, board);
+
+  const robotTurn = () => {
+    if (gameFinished || gameTime !== 2) {
+      return null;
+    }
+
+    setGameTime(1);
+
+    switch (robotMode) {
+      case 0:
+        easyRobot();
+        break;
+      case 1:
+        normalRobot();
+        break;
+      case 2:
+        expertRobot();
+        break;
+    }
+  };
+
+  const easyRobot = () => {
+    var boardIndexFree = [];
+
+    board.forEach((square, squareIndex) => {
+      if (square !== player1.symbol && square !== player2.symbol) {
+        boardIndexFree.push(squareIndex);
+      }
+    });
+
+    var robotPlayIndex =
+      boardIndexFree[
+        Math.floor(Math.random() * (boardIndexFree.length - 0)) + 0
+      ];
+
+    makeRobotPlay(robotPlayIndex);
+  };
+
+  const makeRobotPlay = (index) => {
+    const play = board.map((item, itemIndex) =>
+      itemIndex === index ? player2.symbol : item
+    );
+
+    setBoard(play);
+  };
+
+  const normalRobot = () => {
+    var found = false;
+    var robotPlayIndex;
+    //rows
+    board.forEach((item, index) => {
+      if (index === 0 || index === 3 || index === 6) {
+        if (item !== 0 && item === board[index + 1] && board[index + 2] === 0) {
+          found = true;
+          robotPlayIndex = index + 2;
+        }
+        if (item !== 0 && item === board[index + 2] && board[index + 1] === 0) {
+          found = true;
+          robotPlayIndex = index + 1;
+        }
+        if (
+          item === 0 &&
+          board[index + 1] !== 0 &&
+          board[index + 1] === board[index + 2]
+        ) {
+          found = true;
+          robotPlayIndex = index;
+        }
+      }
+    });
+
+    if (!found) {
+      //columns
+      board.forEach((item, index) => {
+        if (index === 0 || index === 1 || index === 2) {
+          if (
+            item === 0 &&
+            board[index + 3] !== 0 &&
+            board[index + 3] === board[index + 6]
+          ) {
+            found = true;
+            robotPlayIndex = index;
+          }
+          if (
+            item !== 0 &&
+            item === board[index + 3] &&
+            board[index + 6] === 0
+          ) {
+            found = true;
+            robotPlayIndex = index + 6;
+          }
+          if (
+            item !== 0 &&
+            item === board[index + 6] &&
+            board[index + 3] === 0
+          ) {
+            found = true;
+            robotPlayIndex = index + 3;
+          }
+        }
+      });
+    }
+
+    if (!found) {
+      easyRobot();
+    } else {
+      makeRobotPlay(robotPlayIndex);
+    }
+  };
+
+  const expertRobot = () => {
+    var found = false;
+    var robotPlayIndex;
+
+    if (board[0] !== 0 && board[0] === board[8] && board[4] === 0) {
+      found = true;
+      robotPlayIndex = 4;
+    }
+    if (board[0] !== 0 && board[0] === board[4] && board[8] === 0) {
+      found = true;
+      robotPlayIndex = 8;
+    }
+    if (board[0] === 0 && board[4] === board[8] && board[8] !== 0) {
+      found = true;
+      robotPlayIndex = 0;
+    }
+
+    if (board[2] !== 0 && board[2] === board[6] && board[4] === 0) {
+      found = true;
+      robotPlayIndex = 4;
+    }
+    if (board[2] !== 0 && board[2] === board[4] && board[6] === 0) {
+      found = true;
+      robotPlayIndex = 6;
+    }
+    if (board[2] === 0 && board[4] === board[6] && board[6] !== 0) {
+      found = true;
+      robotPlayIndex = 2;
+    }
+
+    if (!found) {
+      normalRobot();
+    } else {
+      makeRobotPlay(robotPlayIndex);
+    }
+  };
+
+  const getTheWinner = () => {
+    var winer = -1;
+    const possiblesWaysToWin = [
+      [board[0], board[1], board[2]],
+      [board[3], board[4], board[5]],
+      [board[6], board[7], board[8]],
+
+      [board[0], board[3], board[6]],
+      [board[1], board[4], board[7]],
+      [board[2], board[5], board[8]],
+
+      [board[0], board[4], board[8]],
+      [board[2], board[4], board[6]],
+    ];
+
+    possiblesWaysToWin.forEach((possible) => {
+      if (possible.every((cell) => cell === player1.symbol)) {
+        winer = 1;
+      } else if (possible.every((cell) => cell === player2.symbol)) {
+        winer = 2;
+      }
+    });
+
+    if (
+      winer === -1 &&
+      board.every((item) => item === player1.symbol || item === player2.symbol)
+    ) {
+      winer = 0;
+    }
+    return winer;
+  };
+
+  const showWinner = (winerNumber) => {
+    if (winerNumber === 0) {
+      setWinner('draw');
+    }
+    if (winerNumber === 1) {
+      setWinner('you won');
+      setscore([score[0] + 1, score[1]]);
+    }
+    if (winerNumber === 2) {
+      setWinner('you lost');
+      setscore([score[0], score[1] + 1]);
+    }
+  };
+
+  const handlePress = (index) => {
+    if (gameFinished) {
+      return null;
+    }
+    if (board[index] === player1.symbol || board[index] === player2.symbol) {
+      console.log('campo já marcado');
+      return null;
+    }
+    if (gameTime !== 1) {
+      console.log('vez do player 2');
+      return null;
+    }
+
+    setBoard(
+      board.map((item, itemIndex) =>
+        itemIndex === index ? player1.symbol : item
+      )
+    );
+    setGameTime(2);
+  };
+
+  const handleReset = () => {
+    setBoard(Array(9).fill(0));
+    setGameFinished(false);
+  };
+
+  const renderSquareComponent = ({ item, index }) => {
+    const borderValue = 5;
+    var border = {};
+    switch (index) {
+      case 0:
+        border = {
+          borderRightWidth: borderValue,
+          borderBottomWidth: borderValue,
+        };
+        break;
+      case 1:
+        border = { borderBottomWidth: borderValue };
+        break;
+      case 2:
+        border = {
+          borderBottomWidth: borderValue,
+          borderLeftWidth: borderValue,
+        };
+        break;
+      case 3:
+        border = { borderRightWidth: borderValue };
+        break;
+      case 5:
+        border = { borderLeftWidth: borderValue };
+        break;
+      case 6:
+        border = {
+          borderRightWidth: borderValue,
+          borderTopWidth: borderValue,
+        };
+        break;
+      case 7:
+        border = { borderTopWidth: borderValue };
+        break;
+      case 8:
+        border = {
+          borderLeftWidth: borderValue,
+          borderTopWidth: borderValue,
+        };
+        break;
+    }
+
+    return (
+      <View
+        style={[style.square, border]}
+        onTouchStart={() => handlePress(index)}
+      >
+        {item === 2 && (
+          <Circle color={player1.symbol === 1 ? color.red : color.blue} />
+        )}
+        {item === 1 && (
+          <X color={player1.symbol === 2 ? color.red : color.blue} />
+        )}
+      </View>
+    );
+  };
+
+  return (
+    <View style={style.container}>
+      <View style={style.header}>
+        <TouchableOpacity
+          style={{ width: '10%' }}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name='left' size={24} />
+        </TouchableOpacity>
+        {robotMode === 0 && <Text style={style.headerText}>Beginner</Text>}
+        {robotMode === 1 && <Text style={style.headerText}>Intermediate</Text>}
+        {robotMode === 2 && (
+          <Text style={[style.headerText, { fontSize: 20 }]}>Expert</Text>
+        )}
+      </View>
+      <View style={style.wrapper}>
+        <View style={style.scoreWrapper}>
+          <View style={style.score}>
+            <Text style={[style.scoreTitle, { color: color.blue }]}>
+              {gameType === 1 ? 'Player 1' : 'Player'}
+            </Text>
+            <Text style={[style.scoreTitle, { color: color.red }]}>
+              {gameType === 1 ? 'Player 2' : 'Robo'}
+            </Text>
+          </View>
+          <View style={style.score}>
+            <Text style={[style.scoreText, { color: color.blue }]}>
+              {score[0]}
+            </Text>
+            <Text style={[style.scoreText, { color: color.red }]}>
+              {score[1]}
+            </Text>
+          </View>
+        </View>
+        <View style={style.tictactoe}>
+          <FlatList
+            data={board}
+            keyExtractor={(item, index) => index}
+            renderItem={renderSquareComponent}
+            numColumns={3}
+          />
+        </View>
+        <View style={style.winnerWrapper}>
+          {gameFinished && (
+            <View style={style.winnerDisplay}>
+              {winner.includes('won') && (
+                <Text style={[style.winnerText, { color: color.blue }]}>
+                  {winner}
+                </Text>
+              )}
+              {winner.includes('lost') && (
+                <Text style={[style.winnerText, { color: color.red }]}>
+                  {winner}
+                </Text>
+              )}
+              {winner.includes('draw') && (
+                <Text style={style.winnerText}>{winner}</Text>
+              )}
+            </View>
+          )}
+          {gameFinished && (
+            <Button title='play again' color='#58B19F' onPress={handleReset} />
+          )}
+        </View>
+      </View>
+    </View>
+  );
+}

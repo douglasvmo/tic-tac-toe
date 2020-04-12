@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Tic Tac Toe",
+    "slug": "tic-toc-toe",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.0",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cortauri.tictactoe",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.cortauri.tictactoe",
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "READ_EXTERNAL_STORAGE",
+        "READ_PHONE_STATE",
+        "VIBRATE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f39c12"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["assets/*"]
+  }
+}
