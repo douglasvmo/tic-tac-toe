@@ -31,9 +31,10 @@ $ npm run start
 
 ```
 ## :rocket: Built With
+- [Expo](https://expo.io/learn)
 - [React Native](https://facebook.github.io/react-native/)
 - [React Navigation](https://reactnavigation.org/)
-- [Expo](https://expo.io/learn)
+- [React Native Svg](https://github.com/react-native-community/react-native-svg)
 
 Made by Douglas Oliveira
 
