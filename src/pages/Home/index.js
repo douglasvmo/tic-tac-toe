@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import style from './style';
+import * as S from './style';
 import O from '../../components/O';
 import X from '../../components/X';
 
@@ -10,10 +9,9 @@ export default function Home() {
   const navigation = useNavigation();
   const [marker, setmarker] = useState(1);
   return (
-    <View style={style.container}>
-      <View style={style.buttomWrapper}>
-        <TouchableOpacity
-          style={style.buttom}
+    <S.Container>
+      <S.ButtomWrapper>
+        <S.Buttom
           onPress={() => {
             navigation.navigate('TicTacToe', {
               robotMode: 0,
@@ -23,10 +21,9 @@ export default function Home() {
             });
           }}
         >
-          <Text style={style.buttomText}>Beginner</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={style.buttom}
+          <S.ButtomText>Beginner</S.ButtomText>
+        </S.Buttom>
+        <S.Buttom
           onPress={() => {
             navigation.navigate('TicTacToe', {
               robotMode: 1,
@@ -36,10 +33,9 @@ export default function Home() {
             });
           }}
         >
-          <Text style={style.buttomText}>Intermediate</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={style.buttom}
+          <S.ButtomText>Intermediate</S.ButtomText>
+        </S.Buttom>
+        <S.Buttom
           onPress={() => {
             navigation.navigate('TicTacToe', {
               robotMode: 2,
@@ -49,31 +45,29 @@ export default function Home() {
             });
           }}
         >
-          <Text style={[style.buttomText, { fontSize: 22 }]}>Expert</Text>
-        </TouchableOpacity>
-      </View>
+          <S.ButtomText>Expert</S.ButtomText>
+        </S.Buttom>
+      </S.ButtomWrapper>
 
-      <Text style={style.markerTitle}>choice</Text>
-      <View style={style.markerWrapper}>
-        <TouchableOpacity
+      <S.MarkerTitle>choice</S.MarkerTitle>
+      <S.MarkerWrapper>
+        <S.MarkerButtom
           onPress={() => setmarker(2)}
           style={[
-            style.markerButtom,
             marker === 2 ? { borderWidth: 2, backgroundColor: '#f39c12' } : {},
           ]}
         >
           <O color='#2980b9' />
-        </TouchableOpacity>
-        <TouchableOpacity
+        </S.MarkerButtom>
+        <S.MarkerButtom
           onPress={() => setmarker(1)}
           style={[
-            style.markerButtom,
             marker === 1 ? { borderWidth: 2, backgroundColor: '#f39c12' } : {},
           ]}
         >
           <X color='#2980b9' />
-        </TouchableOpacity>
-      </View>
-    </View>
+        </S.MarkerButtom>
+      </S.MarkerWrapper>
+    </S.Container>
   );
 }
