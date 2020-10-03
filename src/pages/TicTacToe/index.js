@@ -3,7 +3,7 @@ import { View, Text, FlatList, Button, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-import style, { color } from './style';
+import * as S from './style';
 
 import Circle from '../../components/O';
 import X from '../../components/X';
@@ -293,85 +293,90 @@ export default function TicTacToe(props) {
     }
 
     return (
-      <View
-        style={[style.square, border]}
+      <S.Square
+        style={border}
         onTouchStart={() => handlePress(index)}
       >
         {item === 2 && (
-          <Circle color={player1.symbol === 1 ? color.red : color.blue} />
+          <Circle color={player1.symbol === 1 ? S.color.red : S.color.blue} />
         )}
         {item === 1 && (
-          <X color={player1.symbol === 2 ? color.red : color.blue} />
+          <X color={player1.symbol === 2 ? S.color.red : S.color.blue} />
         )}
-      </View>
+      </S.Square>
     );
   };
 
   return (
-    <View style={style.container}>
-      <View style={style.header}>
+    <S.Container>
+      <S.Header>
         <TouchableOpacity
           style={{ width: '10%' }}
           onPress={() => navigation.goBack()}
         >
           <AntDesign name='left' size={24} />
         </TouchableOpacity>
-        {robotMode === 0 && <Text style={style.headerText}>Beginner</Text>}
-        {robotMode === 1 && <Text style={style.headerText}>Intermediate</Text>}
+        {robotMode === 0 && <S.HeaderText>Beginner</S.HeaderText>}
+        {robotMode === 1 && <S.HeaderText>Intermediate</S.HeaderText>}
         {robotMode === 2 && (
-          <Text style={[style.headerText, { fontSize: 20 }]}>Expert</Text>
+          <S.HeaderText style={{ fontSize: 20 }}>Expert</S.HeaderText>
         )}
-      </View>
-      <View style={style.wrapper}>
-        <View style={style.scoreWrapper}>
-          <View style={style.score}>
-            <Text style={[style.scoreTitle, { color: color.blue }]}>
+      </S.Header>
+
+      <S.Wrapper>
+        <S.ScoreWrapper>
+          <S.Score>
+            <S.ScoreTitle style={{ color: S.color.blue }}>
               {gameType === 1 ? 'Player 1' : 'Player'}
-            </Text>
-            <Text style={[style.scoreTitle, { color: color.red }]}>
+            </S.ScoreTitle>
+            <S.ScoreTitle style={{ color: S.color.red }}>
               {gameType === 1 ? 'Player 2' : 'Robo'}
-            </Text>
-          </View>
-          <View style={style.score}>
-            <Text style={[style.scoreText, { color: color.blue }]}>
+            </S.ScoreTitle>
+          </S.Score>
+          <S.Score>
+            <S.ScoreTitle style={{ color: S.color.blue }}>
               {score[0]}
-            </Text>
-            <Text style={[style.scoreText, { color: color.red }]}>
+            </S.ScoreTitle>
+            <S.ScoreTitle style={{ color: S.color.red}}>
               {score[1]}
-            </Text>
-          </View>
-        </View>
-        <View style={style.tictactoe}>
+            </S.ScoreTitle>
+          </S.Score>
+        </S.ScoreWrapper>
+
+        <S.Tictactoe>
           <FlatList
             data={board}
             keyExtractor={(item, index) => index}
             renderItem={renderSquareComponent}
             numColumns={3}
           />
-        </View>
-        <View style={style.winnerWrapper}>
+        </S.Tictactoe>
+
+        <S.WinnerWrapper>
           {gameFinished && (
-            <View style={style.winnerDisplay}>
+            <S.WinnerDisplay>
               {winner.includes('won') && (
-                <Text style={[style.winnerText, { color: color.blue }]}>
+                <S.WinnerText style={{ color: S.color.blue }}>
                   {winner}
-                </Text>
+                </S.WinnerText>
               )}
               {winner.includes('lost') && (
-                <Text style={[style.winnerText, { color: color.red }]}>
+                <S.WinnerText style={{ color: S.color.red }}>
                   {winner}
-                </Text>
+                </S.WinnerText>
               )}
               {winner.includes('draw') && (
-                <Text style={style.winnerText}>{winner}</Text>
+                <S.winnerText>{winner}</S.winnerText>
               )}
-            </View>
+            </S.WinnerDisplay>
           )}
           {gameFinished && (
             <Button title='play again' color='#58B19F' onPress={handleReset} />
           )}
-        </View>
-      </View>
-    </View>
+        </S.WinnerWrapper>
+        
+      </S.Wrapper>
+
+    </S.Container>
   );
 }
