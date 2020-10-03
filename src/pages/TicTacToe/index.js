@@ -63,7 +63,7 @@ export default function TicTacToe(props) {
 
     var robotPlayIndex =
       boardIndexFree[
-        Math.floor(Math.random() * (boardIndexFree.length - 0)) + 0
+      Math.floor(Math.random() * (boardIndexFree.length - 0)) + 0
       ];
 
     makeRobotPlay(robotPlayIndex);
@@ -307,8 +307,71 @@ export default function TicTacToe(props) {
     );
   };
 
-  return (
-    <S.Container>
+  function renderResul() {
+    return (
+      <S.WinnerWrapper>
+        {gameFinished && (
+          <S.WinnerDisplay>
+            {winner.includes('won') && (
+              <S.WinnerText style={{ color: S.color.blue }}>
+                {winner}
+              </S.WinnerText>
+            )}
+            {winner.includes('lost') && (
+              <S.WinnerText style={{ color: S.color.red }}>
+                {winner}
+              </S.WinnerText>
+            )}
+            {winner.includes('draw') && (
+              <S.WinnerText>{winner}</S.WinnerText>
+            )}
+          </S.WinnerDisplay>
+        )}
+        {gameFinished && (
+          <Button title='play again' color='#58B19F' onPress={handleReset} />
+        )}
+      </S.WinnerWrapper>
+    )
+  }
+
+  function renderBody() {
+    function renderScoreItem(options) {
+      return (
+        <S.Score>
+          <S.ScoreTitle style={{ color: S.color.blue }}>
+            {options.value1}
+          </S.ScoreTitle>
+          <S.ScoreTitle style={{ color: S.color.red }}>
+            {options.value2}
+          </S.ScoreTitle>
+        </S.Score>
+      )
+    }
+
+    return (
+      <S.Wrapper>
+        <S.ScoreWrapper>
+          {renderScoreItem({
+            value1: gameType === 1 ? 'Player 1' : 'Player',
+            value2: gameType === 1 ? 'Player 2' : 'Robo'
+          })}
+          {renderScoreItem({ value1: score[0], value2: score[1] })}
+        </S.ScoreWrapper>
+
+        <S.Tictactoe>
+          <FlatList
+            data={board}
+            keyExtractor={(item, index) => index}
+            renderItem={renderSquareComponent}
+            numColumns={3}
+          />
+        </S.Tictactoe>
+      </S.Wrapper>
+    )
+  }
+
+  function renderHeader() {
+    return (
       <S.Header>
         <TouchableOpacity
           style={{ width: '10%' }}
@@ -322,61 +385,14 @@ export default function TicTacToe(props) {
           <S.HeaderText style={{ fontSize: 20 }}>Expert</S.HeaderText>
         )}
       </S.Header>
+    )
+  }
 
-      <S.Wrapper>
-        <S.ScoreWrapper>
-          <S.Score>
-            <S.ScoreTitle style={{ color: S.color.blue }}>
-              {gameType === 1 ? 'Player 1' : 'Player'}
-            </S.ScoreTitle>
-            <S.ScoreTitle style={{ color: S.color.red }}>
-              {gameType === 1 ? 'Player 2' : 'Robo'}
-            </S.ScoreTitle>
-          </S.Score>
-          <S.Score>
-            <S.ScoreTitle style={{ color: S.color.blue }}>
-              {score[0]}
-            </S.ScoreTitle>
-            <S.ScoreTitle style={{ color: S.color.red}}>
-              {score[1]}
-            </S.ScoreTitle>
-          </S.Score>
-        </S.ScoreWrapper>
-
-        <S.Tictactoe>
-          <FlatList
-            data={board}
-            keyExtractor={(item, index) => index}
-            renderItem={renderSquareComponent}
-            numColumns={3}
-          />
-        </S.Tictactoe>
-
-        <S.WinnerWrapper>
-          {gameFinished && (
-            <S.WinnerDisplay>
-              {winner.includes('won') && (
-                <S.WinnerText style={{ color: S.color.blue }}>
-                  {winner}
-                </S.WinnerText>
-              )}
-              {winner.includes('lost') && (
-                <S.WinnerText style={{ color: S.color.red }}>
-                  {winner}
-                </S.WinnerText>
-              )}
-              {winner.includes('draw') && (
-                <S.winnerText>{winner}</S.winnerText>
-              )}
-            </S.WinnerDisplay>
-          )}
-          {gameFinished && (
-            <Button title='play again' color='#58B19F' onPress={handleReset} />
-          )}
-        </S.WinnerWrapper>
-        
-      </S.Wrapper>
-
+  return (
+    <S.Container>
+      {renderHeader()}
+      {renderBody()}
+      {renderResul()}
     </S.Container>
   );
 }
