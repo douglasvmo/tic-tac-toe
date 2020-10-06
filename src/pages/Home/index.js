@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import * as S from './style';
+import * as S from '../styles';
 import O from '../../components/O';
 import X from '../../components/X';
+import {ThemeContext}  from 'styled-components'
 
 export default function Home() {
   const navigation = useNavigation();
   const [marker, setmarker] = useState(1);
+  const Theme = useContext(ThemeContext)
 
   function renderButtom(options) {
     return (
@@ -15,8 +17,8 @@ export default function Home() {
           navigation.navigate('TicTacToe', {
             robotMode: options.robotMode,
             gameType: options.gameType,
-            player1: { symbol: marker, color: '#2980b9' },
-            player2: { symbol: marker === 1 ? 2 : 1, color: '#e74c3c' },
+            player1: { symbol: marker, color: Theme.colors.player1Color },
+            player2: { symbol: marker === 1 ? 2 : 1, color: Theme.colors.player2Color },
           });
         }}
       >
@@ -33,19 +35,19 @@ export default function Home() {
           <S.MarkerButtom
             onPress={() => setmarker(2)}
             style={[
-              marker === 2 ? { borderWidth: 2, backgroundColor: '#f39c12' } : {},
+              marker === 2 ? { borderWidth: 2, backgroundColor: Theme.colors.buttomColor } : {},
             ]}
           >
-            <O color='#2980b9' />
+            <O color={Theme.colors.player1Color} />
           </S.MarkerButtom>
 
           <S.MarkerButtom
             onPress={() => setmarker(1)}
             style={[
-              marker === 1 ? { borderWidth: 2, backgroundColor: '#f39c12' } : {},
+              marker === 1 ? { borderWidth: 2, backgroundColor: Theme.colors.buttomColor } : {},
             ]}
           >
-            <X color='#2980b9' />
+            <X color={Theme.colors.player1Color} />
           </S.MarkerButtom>
         </S.MarkerWrapper>
       </React.Fragment>
@@ -59,7 +61,7 @@ export default function Home() {
         {renderButtom({ text: 'Intermediate', robotMode: 1, gameType: 0 })}
         {renderButtom({ text: 'Expert', robotMode: 2, gameType: 0 })}
       </S.ButtomWrapper>
-      <RenderChoise/>
+      <RenderChoise />
     </S.Container>
   );
 }
