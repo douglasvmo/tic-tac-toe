@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { FlatList, Button, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import {ThemeContext} from 'styled-components'
 
-import * as S from './style';
+import * as S from '../styles';
 
 import Circle from '../../components/O';
 import X from '../../components/X';
@@ -18,6 +19,7 @@ export default function TicTacToe(props) {
   const [gameFinished, setGameFinished] = useState(false);
   const [winner, setWinner] = useState('');
   const [score, setscore] = useState([0, 0]);
+  const Theme = useContext(ThemeContext)
 
   useEffect(() => {
     var winerNumber = getTheWinner();
@@ -298,10 +300,10 @@ export default function TicTacToe(props) {
         onTouchStart={() => handlePress(index)}
       >
         {item === 2 && (
-          <Circle color={player1.symbol === 1 ? S.color.red : S.color.blue} />
+          <Circle color={player1.symbol === 1 ? Theme.colors.player2Color : Theme.colors.player2Color} />
         )}
         {item === 1 && (
-          <X color={player1.symbol === 2 ? S.color.red : S.color.blue} />
+          <X color={player1.symbol === 2 ? Theme.colors.player2Color : Theme.colors.player1Color} />
         )}
       </S.Square>
     );
@@ -313,12 +315,12 @@ export default function TicTacToe(props) {
         {gameFinished && (
           <S.WinnerDisplay>
             {winner.includes('won') && (
-              <S.WinnerText style={{ color: S.color.blue }}>
+              <S.WinnerText style={{ color: Theme.colors.colors.player1Color }}>
                 {winner}
               </S.WinnerText>
             )}
             {winner.includes('lost') && (
-              <S.WinnerText style={{ color: S.color.red }}>
+              <S.WinnerText style={{ color: Theme.colors.colors.player2Color }}>
                 {winner}
               </S.WinnerText>
             )}
@@ -328,7 +330,7 @@ export default function TicTacToe(props) {
           </S.WinnerDisplay>
         )}
         {gameFinished && (
-          <Button title='play again' color='#58B19F' onPress={handleReset} />
+          <Button title='play again' color={Theme.colors.playAgainColor} onPress={handleReset} />
         )}
       </S.WinnerWrapper>
     )
@@ -338,10 +340,10 @@ export default function TicTacToe(props) {
     function renderScoreItem(options) {
       return (
         <S.Score>
-          <S.ScoreTitle style={{ color: S.color.blue }}>
+          <S.ScoreTitle style={{ color: Theme.colors.player1Color }}>
             {options.value1}
           </S.ScoreTitle>
-          <S.ScoreTitle style={{ color: S.color.red }}>
+          <S.ScoreTitle style={{ color: Theme.colors.player2Color }}>
             {options.value2}
           </S.ScoreTitle>
         </S.Score>
