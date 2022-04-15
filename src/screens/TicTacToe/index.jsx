@@ -18,7 +18,6 @@ export default function TicTacToe(props) {
   const [gameFinished, setGameFinished] = useState(false);
   const [winner, setWinner] = useState('');
   const [score, setscore] = useState([0, 0]);
-  npm;
 
   useEffect(() => {
     const winerNumber = getTheWinner();
