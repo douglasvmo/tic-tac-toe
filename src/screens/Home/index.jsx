@@ -22,34 +22,39 @@ export default function Home() {
       >
         <S.ButtomText>{options.text}</S.ButtomText>
       </S.Buttom>
-    )
+    );
   }
 
+  // eslint-disable-next-line react/no-unstable-nested-components
   function RenderChoise() {
     return (
-      <React.Fragment>
+      <>
         <S.MarkerTitle>choice</S.MarkerTitle>
         <S.MarkerWrapper>
           <S.MarkerButtom
             onPress={() => setmarker(2)}
             style={[
-              marker === 2 ? { borderWidth: 2, backgroundColor: '#f39c12' } : {},
+              marker === 2
+                ? { borderWidth: 2, backgroundColor: '#f39c12' }
+                : {},
             ]}
           >
-            <O color='#2980b9' />
+            <O color="#2980b9" />
           </S.MarkerButtom>
 
           <S.MarkerButtom
             onPress={() => setmarker(1)}
             style={[
-              marker === 1 ? { borderWidth: 2, backgroundColor: '#f39c12' } : {},
+              marker === 1
+                ? { borderWidth: 2, backgroundColor: '#f39c12' }
+                : {},
             ]}
           >
-            <X color='#2980b9' />
+            <X color="#2980b9" />
           </S.MarkerButtom>
         </S.MarkerWrapper>
-      </React.Fragment>
-    )
+      </>
+    );
   }
 
   return (
@@ -59,7 +64,7 @@ export default function Home() {
         {renderButtom({ text: 'Intermediate', robotMode: 1, gameType: 0 })}
         {renderButtom({ text: 'Expert', robotMode: 2, gameType: 0 })}
       </S.ButtomWrapper>
-      <RenderChoise/>
+      <RenderChoise />
     </S.Container>
   );
 }

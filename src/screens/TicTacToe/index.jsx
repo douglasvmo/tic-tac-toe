@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, TouchableOpacity } from 'react-native';
+import { FlatList, Button, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -18,17 +18,16 @@ export default function TicTacToe(props) {
   const [gameFinished, setGameFinished] = useState(false);
   const [winner, setWinner] = useState('');
   const [score, setscore] = useState([0, 0]);
+  npm;
 
   useEffect(() => {
-    var winerNumber = getTheWinner();
+    const winerNumber = getTheWinner();
 
     if (winerNumber !== -1) {
       setGameFinished(true);
       showWinner(winerNumber);
-    } else {
-      if (gameType === 0) {
-        robotTurn();
-      }
+    } else if (gameType === 0) {
+      robotTurn();
     }
   }, board);
 
@@ -53,7 +52,7 @@ export default function TicTacToe(props) {
   };
 
   const easyRobot = () => {
-    var boardIndexFree = [];
+    const boardIndexFree = [];
 
     board.forEach((square, squareIndex) => {
       if (square !== player1.symbol && square !== player2.symbol) {
@@ -61,9 +60,9 @@ export default function TicTacToe(props) {
       }
     });
 
-    var robotPlayIndex =
+    const robotPlayIndex =
       boardIndexFree[
-      Math.floor(Math.random() * (boardIndexFree.length - 0)) + 0
+        Math.floor(Math.random() * (boardIndexFree.length - 0)) + 0
       ];
 
     makeRobotPlay(robotPlayIndex);
@@ -71,16 +70,16 @@ export default function TicTacToe(props) {
 
   const makeRobotPlay = (index) => {
     const play = board.map((item, itemIndex) =>
-      itemIndex === index ? player2.symbol : item
+      itemIndex === index ? player2.symbol : item,
     );
 
     setBoard(play);
   };
 
   const normalRobot = () => {
-    var found = false;
-    var robotPlayIndex;
-    //rows
+    let found = false;
+    let robotPlayIndex;
+    // rows
     board.forEach((item, index) => {
       if (index === 0 || index === 3 || index === 6) {
         if (item !== 0 && item === board[index + 1] && board[index + 2] === 0) {
@@ -103,7 +102,7 @@ export default function TicTacToe(props) {
     });
 
     if (!found) {
-      //columns
+      // columns
       board.forEach((item, index) => {
         if (index === 0 || index === 1 || index === 2) {
           if (
@@ -142,8 +141,8 @@ export default function TicTacToe(props) {
   };
 
   const expertRobot = () => {
-    var found = false;
-    var robotPlayIndex;
+    let found = false;
+    let robotPlayIndex;
 
     if (board[0] !== 0 && board[0] === board[8] && board[4] === 0) {
       found = true;
@@ -179,7 +178,7 @@ export default function TicTacToe(props) {
   };
 
   const getTheWinner = () => {
-    var winer = -1;
+    let winer = -1;
     const possiblesWaysToWin = [
       [board[0], board[1], board[2]],
       [board[3], board[4], board[5]],
@@ -239,8 +238,8 @@ export default function TicTacToe(props) {
 
     setBoard(
       board.map((item, itemIndex) =>
-        itemIndex === index ? player1.symbol : item
-      )
+        itemIndex === index ? player1.symbol : item,
+      ),
     );
     setGameTime(2);
   };
@@ -252,7 +251,7 @@ export default function TicTacToe(props) {
 
   const renderSquareComponent = ({ item, index }) => {
     const borderValue = 5;
-    var border = {};
+    let border = {};
     switch (index) {
       case 0:
         border = {
@@ -293,10 +292,7 @@ export default function TicTacToe(props) {
     }
 
     return (
-      <S.Square
-        style={border}
-        onTouchStart={() => handlePress(index)}
-      >
+      <S.Square style={border} onTouchStart={() => handlePress(index)}>
         {item === 2 && (
           <Circle color={player1.symbol === 1 ? S.color.red : S.color.blue} />
         )}
@@ -322,16 +318,14 @@ export default function TicTacToe(props) {
                 {winner}
               </S.WinnerText>
             )}
-            {winner.includes('draw') && (
-              <S.WinnerText>{winner}</S.WinnerText>
-            )}
+            {winner.includes('draw') && <S.WinnerText>{winner}</S.WinnerText>}
           </S.WinnerDisplay>
         )}
         {gameFinished && (
-          <Button title='play again' color='#58B19F' onPress={handleReset} />
+          <Button title="play again" color="#58B19F" onPress={handleReset} />
         )}
       </S.WinnerWrapper>
-    )
+    );
   }
 
   function renderBody() {
@@ -345,7 +339,7 @@ export default function TicTacToe(props) {
             {options.value2}
           </S.ScoreTitle>
         </S.Score>
-      )
+      );
     }
 
     return (
@@ -353,7 +347,7 @@ export default function TicTacToe(props) {
         <S.ScoreWrapper>
           {renderScoreItem({
             value1: gameType === 1 ? 'Player 1' : 'Player',
-            value2: gameType === 1 ? 'Player 2' : 'Robo'
+            value2: gameType === 1 ? 'Player 2' : 'Robo',
           })}
           {renderScoreItem({ value1: score[0], value2: score[1] })}
         </S.ScoreWrapper>
@@ -367,7 +361,7 @@ export default function TicTacToe(props) {
           />
         </S.Tictactoe>
       </S.Wrapper>
-    )
+    );
   }
 
   function renderHeader() {
@@ -377,7 +371,7 @@ export default function TicTacToe(props) {
           style={{ width: '10%' }}
           onPress={() => navigation.goBack()}
         >
-          <AntDesign name='left' size={24} />
+          <AntDesign name="left" size={24} />
         </TouchableOpacity>
         {robotMode === 0 && <S.HeaderText>Beginner</S.HeaderText>}
         {robotMode === 1 && <S.HeaderText>Intermediate</S.HeaderText>}
@@ -385,7 +379,7 @@ export default function TicTacToe(props) {
           <S.HeaderText style={{ fontSize: 20 }}>Expert</S.HeaderText>
         )}
       </S.Header>
-    )
+    );
   }
 
   return (
